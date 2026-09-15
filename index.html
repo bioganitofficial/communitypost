@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioGanit Post Creator Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #0A111E; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        .container { max-width: 450px; width: 100%; text-align: center; }
+        h1 { font-size: 26px; margin-bottom: 8px; color: #38BDF8; }
+        p { color: #94A3B8; font-size: 14px; margin-bottom: 28px; }
+        .grid { display: flex; flex-direction: column; gap: 14px; }
+        .btn { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 16px; color: #fff; transition: transform 0.2s; }
+        .btn:active { transform: scale(0.98); }
+        .btn-fact { background: #F59E0B; color: #111827; }
+        .btn-poll { background: #8B5CF6; }
+        .btn-quiz { background: #0076F5; }
+        .btn-video { background: #EF4444; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BIOGANIT</h1>
+        <p>Select Post Template to Create</p>
+        <div class="grid">
+            <a href="fact.html" class="btn btn-fact"><span>📌 High-Yield Fact</span> <span>→</span></a>
+            <a href="poll.html" class="btn btn-poll"><span>📊 Student Opinion & Poll</span> <span>→</span></a>
+            <a href="quiz.html" class="btn btn-quiz"><span>❓ Daily Quiz Generator</span> <span>→</span></a>
+            <a href="video.html" class="btn btn-video"><span>🎬 New Video Release</span> <span>→</span></a>
+        </div>
+    </div>
+</body>
+</html>
