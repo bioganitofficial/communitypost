@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCERT High-Yield Fact Post Maker - BioGanit (Font Size Adjustable)</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-outer: #0A111E;            /* Dark Outer Canvas */
+            --amber-banner: #F59E0B;        /* High-Yield Fact Amber Header */
+            --banner-text: #111827;         /* Dark Black-Navy Header Text */
+            --card-white: #FFFFFF;          /* Pure White Inner Card */
+            --footer-bg: #0D1626;           /* Deep Navy Frame & Footer */
+            --frame-border: #F59E0B;        /* Golden/Amber Accent Frame Border */
+            --cyan-title: #0284C7;          /* Title Blue/Cyan matching color */
+            --text-dark: #1E293B;           /* Dark Main Text */
+            --tip-bg: #FFFBEB;              /* Soft Warm Yellow Background */
+            --tip-border: #FCD34D;          /* Warm Yellow Dashed Border */
+            --tip-text: #92400E;            /* Deep Warm Amber Text */
+            --footer-text-left: #94A3B8;    /* Muted Blue-Grey Footer Notice */
+            --footer-accent: #F59E0B;       /* Amber Channel Name */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif;
+            padding: 20px;
+            background-color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-wrapper {
+            display: flex;
+            gap: 28px;
+            max-width: 1700px;
+            width: 100%;
+            align-items: flex-start;
+        }
+
+        /* --- Left Side: Input Form Panel --- */
+        .form-panel {
+            width: 450px;
+            background: #ffffff;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            flex-shrink: 0;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        .form-panel h3 {
+            margin: 0 0 14px 0;
+            color: #0f172a;
+            font-size: 17px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #334155;
+            font-size: 13px;
+        }
+
+        .size-box-wrap {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .font-size-input {
+            width: 54px !important;
+            padding: 3px 5px !important;
+            height: 24px;
+            font-size: 12px !important;
+            text-align: center;
+            border-radius: 4px !important;
+            border: 1px solid #cbd5e1 !important;
+            font-weight: 700;
+            color: #0284C7;
+            background: #f8fafc;
+        }
+
+        input[type="text"], textarea, input[type="file"], input[type="range"] {
+            width: 100%;
+            padding: 8px 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 60px;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .img-control-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-clear {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        #downloadBtn {
+            width: 100%;
+            background-color: var(--amber-banner);
+            color: #111827;
+            border: none;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        #downloadBtn:hover {
+            background-color: #d97706;
+            color: #ffffff;
+        }
+
+        /* --- Right Side: Live Canvas Preview --- */
+        .preview-panel {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .preview-scaler-container {
+            width: 540px;
+            height: 540px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            background: #0A111E;
+        }
+
+        .preview-scaler {
+            transform: scale(0.5);
+            transform-origin: top left;
+            width: 1080px;
+            height: 1080px;
+        }
+
+        /* --- 1080x1080 Target Frame --- */
+        #fact-post {
+            width: 1080px;
+            height: 1080px;
+            background-color: var(--bg-outer);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 35px;
+            box-sizing: border-box;
+        }
+
+        #fact-card-frame {
+            width: 1010px;
+            height: 1010px;
+            background-color: var(--footer-bg);
+            border: 2px solid var(--frame-border);
+            border-radius: 28px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 16px 45px rgba(0,0,0,0.6);
+        }
+
+        /* Top Amber Header Bar */
+        .card-header {
+            height: 85px;
+            background-color: var(--amber-banner);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            color: var(--banner-text);
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 900;
+            font-size: 27px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-left svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--banner-text);
+            flex-shrink: 0;
+        }
+
+        .header-right {
+            font-weight: 900;
+            font-size: 26px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        /* Center White Area */
+        .card-body {
+            flex: 1;
+            background-color: var(--card-white);
+            margin: 20px 20px 0 20px;
+            border-radius: 18px;
+            padding: 32px 44px 18px 44px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Big Centered Watermark Logo */
+        #watermark-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 680px;
+            height: 680px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.14;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Content Layer */
+        .content-layer {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .top-content-group {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 100%;
+        }
+
+        /* Main Heading Box */
+        .fact-title-box {
+            background-color: transparent;
+            border: 2.5px dotted var(--cyan-title);
+            border-radius: 14px;
+            padding: 15px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            text-align: center;
+        }
+
+        .fact-title-text {
+            font-family: 'Noto Sans Gujarati', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--cyan-title);
+            line-height: 1.4;
+        }
+
+        .pin-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .pin-right {
+            transform: scaleX(-1);
+        }
+
+        /* Rules Container */
+        .rules-container {
+            background-color: transparent;
+            border-left: 5px solid var(--amber-banner);
+            border-radius: 4px;
+            padding: 10px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .rule-item {
+            font-family: 'Noto Sans Gujarati', sans-serif;
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.5;
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+        }
+
+        .rule-item::before {
+            content: "•";
+            color: var(--amber-banner);
+            font-size: 34px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        /* Middle Flexible Diagram Area */
+        #fact-img-wrap {
+            display: none;
+            width: 100%;
+            flex: 1;
+            justify-content: center;
+            align-items: center;
+            margin: auto 0;
+        }
+
+        #fact-img-canvas {
+            display: block;
+            border-radius: 8px;
+        }
+
+        /* NEET Tip Box */
+        .tip-box {
+            background-color: var(--tip-bg);
+            border: 2px dashed var(--tip-border);
+            border-radius: 14px;
+            padding: 16px 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            width: 100%;
+            flex-shrink: 0;
+            margin-top: auto;
+            margin-bottom: 0;
+        }
+
+        .tip-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--tip-text);
+            letter-spacing: 1px;
+        }
+
+        .tip-star {
+            color: #D97706;
+            font-size: 26px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .tip-content {
+            font-family: 'Noto Sans Gujarati', sans-serif;
+            font-size: 29px;
+            font-weight: 700;
+            color: var(--tip-text);
+            line-height: 1.45;
+        }
+
+        /* Uniform Bottom Footer Bar */
+        .card-footer {
+            height: 68px;
+            background-color: var(--footer-bg);
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--footer-text-left);
+        }
+
+        .footer-right {
+            color: var(--footer-accent);
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        
+        <!-- === Left Side: Input Form Panel with Font Size Controls === -->
+        <div class="form-panel">
+            <h3>High-Yield Fact Settings</h3>
+
+            <div class="form-group">
+                <label>વોટરમાર્ક લોગો અપલોડ કરો (PNG)</label>
+                <input type="file" id="logoIn" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label>વોટરમાર્ક પારદર્શકતા (Opacity)</label>
+                <div class="slider-row">
+                    <input type="range" id="opacitySlider" min="0.04" max="0.35" step="0.01" value="0.14">
+                    <span id="opacityVal" style="font-size:12px; font-weight:700; width:36px;">14%</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>વધારાની આકૃતિ / ડાયાગ્રામ (Image)</label>
+                <div class="img-control-row">
+                    <input type="file" id="qImgIn" accept="image/*">
+                    <button class="btn-clear" id="clearImgBtn" type="button">હટાવો</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>આકૃતિની સાઇઝ (Diagram Size - Up to 550px)</label>
+                <div class="slider-row">
+                    <input type="range" id="imgSizeSlider" min="150" max="550" step="10" value="300">
+                    <span id="imgSizeVal" style="font-size:12px; font-weight:700; width:45px;">300px</span>
+                </div>
+            </div>
+
+            <!-- 1. Header Title & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>હેડર ટાઇટલ</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szHeaderTitle" value="27" min="16" max="42">px</div>
+                </div>
+                <input type="text" id="headerTitleIn" value="NCERT HIGH–YIELD FACT">
+            </div>
+
+            <!-- 2. Chapter & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>પ્રકરણ નંબર</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szChapter" value="26" min="16" max="42">px</div>
+                </div>
+                <input type="text" id="chapterIn" value="CH-05">
+            </div>
+
+            <!-- 3. Fact / Rule Main Heading & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>ફેક્ટ / નિયમનું મુખ્ય હેડિંગ</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szFactTitle" value="32" min="18" max="48">px</div>
+                </div>
+                <input type="text" id="factTitleIn" value="5' End vs 3' End નો સુવર્ણ નિયમ:">
+            </div>
+
+            <!-- 4. Rules Common Font Size & Points -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>નિયમો / પોઇન્ટ્સ (લખાણ)</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szRules" value="30" min="16" max="44">px</div>
+                </div>
+                <input type="text" id="point1In" value="5' છેડો: રિબોઝ શર્કરાના C-5 પર મુક્ત ફોસ્ફેટ જૂથ." style="margin-bottom:6px;">
+                <input type="text" id="point2In" value="3' છેડો: રિબોઝ શર્કરાના C-3 પર મુક્ત –OH જૂથ." style="margin-bottom:6px;">
+                <input type="text" id="point3In" value="" placeholder="ઓપ્શનલ પોઇન્ટ 3">
+            </div>
+
+            <!-- 5. NEET Tip Header Size & Content Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>NEET TIP હેડર Size</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szTipHeader" value="26" min="16" max="40">px</div>
+                </div>
+                <div class="label-row" style="margin-top:6px;">
+                    <label>NEET TIP લખાણ (Content)</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szTipContent" value="29" min="16" max="44">px</div>
+                </div>
+                <textarea id="tipIn">ફોસ્ફોડાયએસ્ટર બંધ 3'–5' દિશામાં બને છે!</textarea>
+            </div>
+
+            <!-- 6. Footer Notice & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>ફૂટર નોટિસ (ડાબી બાજુ)</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szFooterNotice" value="20" min="12" max="32">px</div>
+                </div>
+                <input type="text" id="footerNoticeIn" value="Save this for NEET Revision">
+            </div>
+
+            <!-- 7. Channel Name & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>ચેનલ નામ (જમણી બાજુ)</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szChannel" value="22" min="12" max="34">px</div>
+                </div>
+                <input type="text" id="channelIn" value="BIOGANIT">
+            </div>
+
+            <button id="downloadBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                ડાઉનલોડ કરો (Ultra HD Crisp)
+            </button>
+        </div>
+
+        <!-- === Right Side: Live Canvas Preview === -->
+        <div class="preview-panel">
+            <h3 style="margin-top:0; color:#475569;">લાઇવ પ્રિવ્યુ (1080x1080)</h3>
+            
+            <div class="preview-scaler-container">
+                <div class="preview-scaler">
+                    <div id="fact-post">
+                        <div id="fact-card-frame">
+                            
+                            <!-- Top Amber Header -->
+                            <div class="card-header">
+                                <div class="header-left" id="hdrLeftWrap">
+                                    <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+                                    <span id="outHeaderTitle">NCERT HIGH–YIELD FACT</span>
+                                </div>
+                                <div class="header-right" id="outChapter">CH-05</div>
+                            </div>
+
+                            <!-- White Area with Watermark & Content -->
+                            <div class="card-body">
+                                <div id="watermark-logo"></div>
+
+                                <div class="content-layer">
+                                    <!-- Top Group: Heading + Rules -->
+                                    <div class="top-content-group">
+                                        <div class="fact-title-box">
+                                            <span class="pin-icon" id="pinLeft">📌</span>
+                                            <span class="fact-title-text" id="outFactTitle">5' End vs 3' End નો સુવર્ણ નિયમ:</span>
+                                            <span class="pin-icon pin-right" id="pinRight">📌</span>
+                                        </div>
+
+                                        <div class="rules-container">
+                                            <div class="rule-item" id="p1Wrap"><span id="outPoint1">5' છેડો: રિબોઝ શર્કરાના C-5 પર મુક્ત ફોસ્ફેટ જૂથ.</span></div>
+                                            <div class="rule-item" id="p2Wrap"><span id="outPoint2">3' છેડો: રિબોઝ શર્કરાના C-3 પર મુક્ત –OH જૂથ.</span></div>
+                                            <div class="rule-item" id="p3Wrap" style="display:none;"><span id="outPoint3"></span></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Middle: Diagram Canvas -->
+                                    <div id="fact-img-wrap">
+                                        <canvas id="fact-img-canvas"></canvas>
+                                    </div>
+
+                                    <!-- Bottom: NEET Tip Box -->
+                                    <div class="tip-box" id="tipWrap">
+                                        <div class="tip-header" id="outTipHdrWrap">
+                                            <span class="tip-star">★</span>
+                                            <span id="outTipHdrText">NEET TIP</span>
+                                            <span class="tip-star">★</span>
+                                        </div>
+                                        <div class="tip-content" id="outTip">
+                                            ફોસ્ફોડાયએસ્ટર બંધ 3'–5' દિશામાં બને છે!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Frame Footer Bar -->
+                            <div class="card-footer">
+                                <div class="footer-left" id="outFooterNotice">
+                                    Save this for NEET Revision
+                                </div>
+                                <div class="footer-right" id="outChannel">BIOGANIT</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Html2Canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        // Inputs
+        const inputs = {
+            logo: document.getElementById('logoIn'),
+            opacity: document.getElementById('opacitySlider'),
+            opacityVal: document.getElementById('opacityVal'),
+            qImg: document.getElementById('qImgIn'),
+            clearImg: document.getElementById('clearImgBtn'),
+            imgSize: document.getElementById('imgSizeSlider'),
+            imgSizeVal: document.getElementById('imgSizeVal'),
+            headerTitle: document.getElementById('headerTitleIn'),
+            chapter: document.getElementById('chapterIn'),
+            factTitle: document.getElementById('factTitleIn'),
+            point1: document.getElementById('point1In'),
+            point2: document.getElementById('point2In'),
+            point3: document.getElementById('point3In'),
+            tip: document.getElementById('tipIn'),
+            footerNotice: document.getElementById('footerNoticeIn'),
+            channel: document.getElementById('channelIn'),
+            szHeaderTitle: document.getElementById('szHeaderTitle'),
+            szChapter: document.getElementById('szChapter'),
+            szFactTitle: document.getElementById('szFactTitle'),
+            szRules: document.getElementById('szRules'),
+            szTipHeader: document.getElementById('szTipHeader'),
+            szTipContent: document.getElementById('szTipContent'),
+            szFooterNotice: document.getElementById('szFooterNotice'),
+            szChannel: document.getElementById('szChannel')
+        };
+
+        // Outputs
+        const outputs = {
+            watermark: document.getElementById('watermark-logo'),
+            qImgWrap: document.getElementById('fact-img-wrap'),
+            imgCanvas: document.getElementById('fact-img-canvas'),
+            headerTitle: document.getElementById('outHeaderTitle'),
+            hdrLeftWrap: document.getElementById('hdrLeftWrap'),
+            chapter: document.getElementById('outChapter'),
+            factTitle: document.getElementById('outFactTitle'),
+            pinLeft: document.getElementById('pinLeft'),
+            pinRight: document.getElementById('pinRight'),
+            point1: document.getElementById('outPoint1'),
+            point2: document.getElementById('outPoint2'),
+            point3: document.getElementById('outPoint3'),
+            p1Wrap: document.getElementById('p1Wrap'),
+            p2Wrap: document.getElementById('p2Wrap'),
+            p3Wrap: document.getElementById('p3Wrap'),
+            tip: document.getElementById('outTip'),
+            tipHdrWrap: document.getElementById('outTipHdrWrap'),
+            tipWrap: document.getElementById('tipWrap'),
+            footerNotice: document.getElementById('outFooterNotice'),
+            channel: document.getElementById('outChannel')
+        };
+
+        let rawImage = null;
+
+        function updateCard() {
+            outputs.headerTitle.innerText = inputs.headerTitle.value;
+            outputs.chapter.innerText = inputs.chapter.value;
+            outputs.factTitle.innerText = inputs.factTitle.value;
+            outputs.footerNotice.innerText = inputs.footerNotice.value;
+            outputs.channel.innerText = inputs.channel.value;
+
+            if (inputs.point1.value.trim()) {
+                outputs.point1.innerText = inputs.point1.value;
+                outputs.p1Wrap.style.display = 'flex';
+            } else {
+                outputs.p1Wrap.style.display = 'none';
+            }
+
+            if (inputs.point2.value.trim()) {
+                outputs.point2.innerText = inputs.point2.value;
+                outputs.p2Wrap.style.display = 'flex';
+            } else {
+                outputs.p2Wrap.style.display = 'none';
+            }
+
+            if (inputs.point3.value.trim()) {
+                outputs.point3.innerText = inputs.point3.value;
+                outputs.p3Wrap.style.display = 'flex';
+            } else {
+                outputs.p3Wrap.style.display = 'none';
+            }
+
+            if (inputs.tip.value.trim()) {
+                outputs.tip.innerText = inputs.tip.value;
+                outputs.tipWrap.style.display = 'flex';
+            } else {
+                outputs.tipWrap.style.display = 'none';
+            }
+
+            const szHdr = inputs.szHeaderTitle.value || 27;
+            outputs.hdrLeftWrap.style.fontSize = szHdr + 'px';
+
+            const szCh = inputs.szChapter.value || 26;
+            outputs.chapter.style.fontSize = szCh + 'px';
+
+            const szFact = inputs.szFactTitle.value || 32;
+            outputs.factTitle.style.fontSize = szFact + 'px';
+            outputs.pinLeft.style.fontSize = Math.round(szFact * 0.88) + 'px';
+            outputs.pinRight.style.fontSize = Math.round(szFact * 0.88) + 'px';
+
+            const szRules = inputs.szRules.value || 30;
+            outputs.p1Wrap.style.fontSize = szRules + 'px';
+            outputs.p2Wrap.style.fontSize = szRules + 'px';
+            outputs.p3Wrap.style.fontSize = szRules + 'px';
+
+            const szTipHdr = inputs.szTipHeader.value || 26;
+            outputs.tipHdrWrap.style.fontSize = szTipHdr + 'px';
+
+            const szTipBody = inputs.szTipContent.value || 29;
+            outputs.tip.style.fontSize = szTipBody + 'px';
+
+            const szFootNot = inputs.szFooterNotice.value || 20;
+            outputs.footerNotice.style.fontSize = szFootNot + 'px';
+
+            const szChan = inputs.szChannel.value || 22;
+            outputs.channel.style.fontSize = szChan + 'px';
+        }
+
+        inputs.opacity.addEventListener('input', function(e) {
+            const val = parseFloat(e.target.value);
+            outputs.watermark.style.opacity = val;
+            inputs.opacityVal.innerText = Math.round(val * 100) + '%';
+        });
+
+        inputs.logo.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    outputs.watermark.style.backgroundImage = `url(${evt.target.result})`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function processImageTransparency() {
+            if (!rawImage) return;
+            const targetHeight = parseInt(inputs.imgSize.value);
+            const scale = targetHeight / rawImage.height;
+            const targetWidth = rawImage.width * scale;
+
+            const canvas = outputs.imgCanvas;
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(rawImage, 0, 0, targetWidth, targetHeight);
+
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imgData.data;
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i+1];
+                const b = data[i+2];
+
+                if (r > 238 && g > 238 && b > 238) {
+                    data[i+3] = 0;
+                } else if (r > 215 && g > 215 && b > 215) {
+                    const avg = (r + g + b) / 3;
+                    data[i+3] = Math.max(0, Math.min(255, (255 - avg) * 5));
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
+            outputs.qImgWrap.style.display = 'flex';
+        }
+
+        inputs.qImg.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    rawImage = new Image();
+                    rawImage.onload = function() {
+                        processImageTransparency();
+                    };
+                    rawImage.src = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        inputs.imgSize.addEventListener('input', function(e) {
+            inputs.imgSizeVal.innerText = e.target.value + 'px';
+            processImageTransparency();
+        });
+
+        inputs.clearImg.addEventListener('click', function() {
+            inputs.qImg.value = '';
+            rawImage = null;
+            outputs.qImgWrap.style.display = 'none';
+        });
+
+        Object.values(inputs).forEach(input => {
+            if (input.type !== 'file' && input.type !== 'range') {
+                input.addEventListener('input', updateCard);
+            }
+        });
+
+        // Ultra HD iOS Safari / Home Screen PWA Friendly Export
+        document.getElementById('downloadBtn').addEventListener('click', async function() {
+            const btn = this;
+            const target = document.getElementById('fact-post');
+            const scaler = document.querySelector('.preview-scaler');
+
+            btn.disabled = true;
+            const originalHtml = btn.innerHTML;
+            btn.innerText = 'હાઈ-ક્વોલિટી ઇમેજ બની રહી છે...';
+
+            scaler.style.transform = 'none';
+
+            try {
+                const canvas = await html2canvas(target, {
+                    width: 1080,
+                    height: 1080,
+                    scale: 2,
+                    backgroundColor: '#0A111E',
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false
+                });
+
+                scaler.style.transform = 'scale(0.5)';
+
+                canvas.toBlob(async function(blob) {
+                    if (!blob) {
+                        alert('ઇમેજ બનાવવામાં તકલીફ પડી!');
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                        return;
+                    }
+
+                    const fileName = `NCERT_High_Yield_Fact_${Date.now()}.png`;
+                    const file = new File([blob], fileName, { type: 'image/png' });
+
+                    // 1. iOS Safari & Add to Home Screen Share Sheet (Saves directly to Photos)
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        try {
+                            await navigator.share({
+                                files: [file],
+                                title: 'BioGanit High-Yield Fact',
+                                text: 'Save your HD post image'
+                            });
+                            btn.disabled = false;
+                            btn.innerHTML = originalHtml;
+                            return;
+                        } catch (shareErr) {
+                            if (shareErr.name === 'AbortError') {
+                                btn.disabled = false;
+                                btn.innerHTML = originalHtml;
+                                return;
+                            }
+                        }
+                    }
+
+                    // 2. Regular Browser Direct Download Fallback
+                    const blobUrl = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }, 'image/png');
+
+            } catch (err) {
+                scaler.style.transform = 'scale(0.5)';
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+                alert('ભૂલ આવી! ફરી પ્રયાસ કરો: ' + err.message);
+            }
+        });
+
+        updateCard();
+    </script>
+</body>
+</html>

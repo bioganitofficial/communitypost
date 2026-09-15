@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Opinion & Poll Post Maker - BioGanit</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-outer: #0A111E;            /* Dark Outer Canvas */
+            --purple-banner: #8B5CF6;       /* Medium Purple Header Bar */
+            --purple-border: #8B5CF6;       /* Frame Accent Border */
+            --banner-text: #FFFFFF;         /* White Header Text */
+            --card-white: #FFFFFF;          /* Pure White Inner Card */
+            --footer-bg: #0D1626;           /* Deep Navy Frame & Footer Background */
+            --text-dark: #1E293B;           /* Dark Main Question Text */
+            --text-sub: #000000;            /* Pure Black Subtext Color */
+            --purple-accent: #A78BFA;       /* Light Purple for BIOGANIT in Footer */
+            --footer-text-left: #94A3B8;    /* Muted Blue-Grey Footer Notice */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif;
+            padding: 20px;
+            background-color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-wrapper {
+            display: flex;
+            gap: 28px;
+            max-width: 1700px;
+            width: 100%;
+            align-items: flex-start;
+        }
+
+        /* --- Left Side: Input Form Panel --- */
+        .form-panel {
+            width: 450px;
+            background: #ffffff;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            flex-shrink: 0;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        .form-panel h3 {
+            margin: 0 0 14px 0;
+            color: #0f172a;
+            font-size: 17px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #334155;
+            font-size: 13px;
+        }
+
+        .size-box-wrap {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .font-size-input {
+            width: 52px !important;
+            padding: 3px 5px !important;
+            height: 24px;
+            font-size: 12px !important;
+            text-align: center;
+            border-radius: 4px !important;
+            border: 1px solid #cbd5e1 !important;
+            font-weight: 700;
+            color: #8B5CF6;
+            background: #f8fafc;
+        }
+
+        input[type="text"], textarea, input[type="file"], input[type="range"] {
+            width: 100%;
+            padding: 8px 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 65px;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .img-control-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-clear {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        #downloadBtn {
+            width: 100%;
+            background-color: var(--purple-banner);
+            color: #ffffff;
+            border: none;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        #downloadBtn:hover {
+            background-color: #7c3aed;
+        }
+
+        /* --- Right Side: Live Canvas Preview --- */
+        .preview-panel {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .preview-scaler-container {
+            width: 540px;
+            height: 540px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            background: #0A111E;
+        }
+
+        .preview-scaler {
+            transform: scale(0.5);
+            transform-origin: top left;
+            width: 1080px;
+            height: 1080px;
+        }
+
+        /* --- 1080x1080 Target Frame --- */
+        #poll-post {
+            width: 1080px;
+            height: 1080px;
+            background-color: var(--bg-outer);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 35px;
+            box-sizing: border-box;
+        }
+
+        #poll-card-frame {
+            width: 1010px;
+            height: 1010px;
+            background-color: var(--footer-bg);
+            border: 2px solid var(--purple-border);
+            border-radius: 28px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 16px 45px rgba(0,0,0,0.6);
+        }
+
+        /* Top Purple Header Bar */
+        .card-header {
+            height: 85px;
+            background-color: var(--purple-banner);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            color: var(--banner-text);
+            flex-shrink: 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 800;
+            font-size: 26px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-left svg {
+            width: 32px;
+            height: 32px;
+            fill: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .header-right {
+            font-weight: 800;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Center White Area */
+        .card-body {
+            flex: 1;
+            background-color: var(--card-white);
+            margin: 20px 20px 0 20px;
+            border-radius: 18px;
+            padding: 0 48px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Big Centered Watermark Logo */
+        #watermark-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 680px;
+            height: 680px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.14;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Content Layer: Starts from top with appropriate top spacing */
+        .content-layer {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            gap: 22px;
+            padding-top: 55px;
+        }
+
+        /* Question Diagram Container (Auto Transparent Canvas) */
+        #question-img-wrap {
+            display: none;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        #question-img-canvas {
+            display: block;
+            border-radius: 8px;
+            background: transparent;
+        }
+
+        /* Combined Question & Options Block for dynamic Left Alignment */
+        #qa-block {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 880px;
+            gap: 20px;
+        }
+
+        /* Main Opinion/Poll Question */
+        #poll-question-text {
+            font-family: 'Noto Sans Gujarati', sans-serif;
+            font-size: 34px;
+            font-weight: 800;
+            color: var(--text-dark);
+            line-height: 1.45;
+            text-align: left;
+            width: 100%;
+        }
+
+        /* Subtext / Options Line (Always aligned to question start) */
+        #poll-subtext {
+            font-family: 'Noto Sans Gujarati', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-sub);
+            line-height: 1.6;
+            text-align: left;
+            white-space: pre-line;
+            display: block;
+        }
+
+        /* Bottom Footer Bar */
+        .card-footer {
+            height: 68px;
+            background-color: var(--footer-bg);
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Noto Sans Gujarati', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--footer-text-left);
+        }
+
+        .footer-left svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--footer-text-left);
+            flex-shrink: 0;
+        }
+
+        .footer-right {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--purple-accent);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        
+        <!-- === Left Form Panel === -->
+        <div class="form-panel">
+            <h3>Student Opinion & Poll Settings</h3>
+
+            <!-- Watermark Logo -->
+            <div class="form-group">
+                <label>વોટરમાર્ક લોગો અપલોડ કરો (PNG)</label>
+                <input type="file" id="logoIn" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label>વોટરમાર્ક પારદર્શકતા (Opacity)</label>
+                <div class="slider-row">
+                    <input type="range" id="opacitySlider" min="0.04" max="0.35" step="0.01" value="0.14">
+                    <span id="opacityVal" style="font-size:12px; font-weight:700; width:36px;">14%</span>
+                </div>
+            </div>
+
+            <!-- Additional Diagram / Brain Symbol Image -->
+            <div class="form-group">
+                <label>વધારાની આકૃતિ / ડાયાગ્રામ (Image)</label>
+                <div class="img-control-row">
+                    <input type="file" id="qImgIn" accept="image/*">
+                    <button class="btn-clear" id="clearImgBtn" type="button">હટાવો</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>આકૃતિની સાઇઝ (Diagram Size - Up to 550px)</label>
+                <div class="slider-row">
+                    <input type="range" id="imgSizeSlider" min="80" max="550" step="5" value="180">
+                    <span id="imgSizeVal" style="font-size:12px; font-weight:700; width:45px;">180px</span>
+                </div>
+            </div>
+
+            <!-- 1. Header Title & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>ટોપ હેડર ટેક્સ્ટ</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szHeaderTitle" value="26" min="16" max="42">px</div>
+                </div>
+                <input type="text" id="headerTitleIn" value="STUDENT OPINION & POLL">
+            </div>
+
+            <!-- 2. Tag / Header Right & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>હેશટેગ / જમણી બાજુ ટેક્સ્ટ</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szTag" value="24" min="14" max="40">px</div>
+                </div>
+                <input type="text" id="tagIn" value="#Community">
+            </div>
+
+            <!-- 3. Question & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>મુખ્ય સવાલ (ગુજરાતી)</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szQuestion" value="34" min="20" max="48">px</div>
+                </div>
+                <textarea id="questionIn">પ્રકરણ 5 માં તમને સૌથી અઘરો ટોપિક કયો લાગે છે?</textarea>
+            </div>
+
+            <!-- 4. Subtext / Options Line & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>સબટેક્સ્ટ / ઓપ્શન્સ લાઇન (Black)</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szSubtext" value="24" min="14" max="38">px</div>
+                </div>
+                <textarea id="subtextIn">1) DNA રેપ્લિકેશન
+2) ટ્રાન્સક્રિપ્શન
+3) લેક ઓપેરોન
+4) જનીન અભિવ્યક્તનું નિયમન</textarea>
+            </div>
+
+            <!-- 5. Footer Notice & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>ફૂટર લખાણ (ડાબી બાજુ)</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szFooterLeft" value="20" min="14" max="36">px</div>
+                </div>
+                <input type="text" id="footerLeftIn" value="તમારો અભિપ્રાય કોમેન્ટમાં લખો 👇">
+            </div>
+
+            <!-- 6. Channel Name & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>ચેનલ નામ (જમણી બાજુ)</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szChannel" value="22" min="12" max="34">px</div>
+                </div>
+                <input type="text" id="channelIn" value="BIOGANIT">
+            </div>
+
+            <button id="downloadBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                ડાઉનલોડ કરો (Ultra HD Crisp)
+            </button>
+        </div>
+
+        <!-- === Right Live Preview === -->
+        <div class="preview-panel">
+            <h3 style="margin-top:0; color:#475569;">લાઇવ પ્રિવ્યુ (1080x1080)</h3>
+            
+            <div class="preview-scaler-container">
+                <div class="preview-scaler">
+                    <div id="poll-post">
+                        <div id="poll-card-frame">
+                            
+                            <!-- Top Purple Header -->
+                            <div class="card-header">
+                                <div class="header-left" id="hdrLeftWrap">
+                                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-6 9h-4V9h4v2zm3-4H7V5h10v2z"/></svg>
+                                    <span id="outHeaderTitle">STUDENT OPINION & POLL</span>
+                                </div>
+                                <div class="header-right" id="outTag">#Community</div>
+                            </div>
+
+                            <!-- White Area with Watermark & Content starting from Top -->
+                            <div class="card-body">
+                                <div id="watermark-logo"></div>
+
+                                <div class="content-layer">
+                                    <!-- Diagram / Brain Image Container -->
+                                    <div id="question-img-wrap">
+                                        <canvas id="question-img-canvas"></canvas>
+                                    </div>
+
+                                    <!-- Grouped Block: Starts from top & aligns options to question start -->
+                                    <div id="qa-block">
+                                        <!-- Main Question -->
+                                        <div id="poll-question-text">પ્રકરણ 5 માં તમને સૌથી અઘરો ટોપિક કયો લાગે છે?</div>
+
+                                        <!-- Subtext / Options Line -->
+                                        <div id="poll-subtext">1) DNA રેપ્લિકેશન
+2) ટ્રાન્સક્રિપ્શન
+3) લેક ઓપેરોન
+4) જનીન અભિવ્યક્તનું નિયમન</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Footer Bar -->
+                            <div class="card-footer">
+                                <div class="footer-left" id="outFooterLeft">
+                                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                                    <span id="outFooterLeftText">તમારો અભિપ્રાય કોમેન્ટમાં લખો 👇</span>
+                                </div>
+                                <div class="footer-right" id="outChannel">BIOGANIT</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Html2Canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        const inputs = {
+            logo: document.getElementById('logoIn'),
+            opacity: document.getElementById('opacitySlider'),
+            opacityVal: document.getElementById('opacityVal'),
+            qImg: document.getElementById('qImgIn'),
+            clearImg: document.getElementById('clearImgBtn'),
+            imgSize: document.getElementById('imgSizeSlider'),
+            imgSizeVal: document.getElementById('imgSizeVal'),
+            headerTitle: document.getElementById('headerTitleIn'),
+            tag: document.getElementById('tagIn'),
+            question: document.getElementById('questionIn'),
+            subtext: document.getElementById('subtextIn'),
+            footerLeft: document.getElementById('footerLeftIn'),
+            channel: document.getElementById('channelIn'),
+            szHeaderTitle: document.getElementById('szHeaderTitle'),
+            szTag: document.getElementById('szTag'),
+            szQuestion: document.getElementById('szQuestion'),
+            szSubtext: document.getElementById('szSubtext'),
+            szFooterLeft: document.getElementById('szFooterLeft'),
+            szChannel: document.getElementById('szChannel')
+        };
+
+        const outputs = {
+            watermark: document.getElementById('watermark-logo'),
+            qImgWrap: document.getElementById('question-img-wrap'),
+            imgCanvas: document.getElementById('question-img-canvas'),
+            qaBlock: document.getElementById('qa-block'),
+            headerTitle: document.getElementById('outHeaderTitle'),
+            hdrLeftWrap: document.getElementById('hdrLeftWrap'),
+            tag: document.getElementById('outTag'),
+            question: document.getElementById('poll-question-text'),
+            subtext: document.getElementById('poll-subtext'),
+            footerLeftText: document.getElementById('outFooterLeftText'),
+            footerLeft: document.getElementById('outFooterLeft'),
+            channel: document.getElementById('outChannel')
+        };
+
+        let rawQuestionImage = null;
+
+        function updateCard() {
+            outputs.headerTitle.innerText = inputs.headerTitle.value;
+            outputs.tag.innerText = inputs.tag.value;
+            outputs.question.innerText = inputs.question.value;
+            
+            if (inputs.subtext.value.trim()) {
+                outputs.subtext.innerText = inputs.subtext.value;
+                outputs.subtext.style.display = 'block';
+            } else {
+                outputs.subtext.style.display = 'none';
+            }
+
+            outputs.footerLeftText.innerText = inputs.footerLeft.value;
+            outputs.channel.innerText = inputs.channel.value;
+
+            // Font Size Adjustments
+            outputs.hdrLeftWrap.style.fontSize = (inputs.szHeaderTitle.value || 26) + 'px';
+            outputs.tag.style.fontSize = (inputs.szTag.value || 24) + 'px';
+            outputs.question.style.fontSize = (inputs.szQuestion.value || 34) + 'px';
+            outputs.subtext.style.fontSize = (inputs.szSubtext.value || 24) + 'px';
+            outputs.footerLeft.style.fontSize = (inputs.szFooterLeft.value || 20) + 'px';
+            outputs.channel.style.fontSize = (inputs.szChannel.value || 22) + 'px';
+        }
+
+        // Watermark Opacity Slider
+        inputs.opacity.addEventListener('input', function(e) {
+            const val = parseFloat(e.target.value);
+            outputs.watermark.style.opacity = val;
+            inputs.opacityVal.innerText = Math.round(val * 100) + '%';
+        });
+
+        // Watermark Logo Upload
+        inputs.logo.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    outputs.watermark.style.backgroundImage = `url(${evt.target.result})`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Smart Background Removal Algorithm
+        function processImageTransparency() {
+            if (!rawQuestionImage) return;
+            const targetHeight = parseInt(inputs.imgSize.value);
+            const scale = targetHeight / rawQuestionImage.height;
+            const targetWidth = rawQuestionImage.width * scale;
+
+            const canvas = outputs.imgCanvas;
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(rawQuestionImage, 0, 0, targetWidth, targetHeight);
+
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imgData.data;
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i+1];
+                const b = data[i+2];
+
+                if (r > 238 && g > 238 && b > 238) {
+                    data[i+3] = 0;
+                } else if (r > 215 && g > 215 && b > 215) {
+                    const avg = (r + g + b) / 3;
+                    data[i+3] = Math.max(0, Math.min(255, (255 - avg) * 5));
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
+            outputs.qImgWrap.style.display = 'flex';
+        }
+
+        // Question Diagram / Brain Image Upload
+        inputs.qImg.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    rawQuestionImage = new Image();
+                    rawQuestionImage.onload = function() {
+                        processImageTransparency();
+                    };
+                    rawQuestionImage.src = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        inputs.imgSize.addEventListener('input', function(e) {
+            inputs.imgSizeVal.innerText = e.target.value + 'px';
+            processImageTransparency();
+        });
+
+        inputs.clearImg.addEventListener('click', function() {
+            inputs.qImg.value = '';
+            rawQuestionImage = null;
+            outputs.qImgWrap.style.display = 'none';
+        });
+
+        // Input listeners
+        Object.values(inputs).forEach(input => {
+            if (input.type !== 'file' && input.type !== 'range') {
+                input.addEventListener('input', updateCard);
+            }
+        });
+
+        // iOS Safari & PWA Friendly Ultra HD 2X Export
+        document.getElementById('downloadBtn').addEventListener('click', async function() {
+            const btn = this;
+            const target = document.getElementById('poll-post');
+            const scaler = document.querySelector('.preview-scaler');
+
+            btn.disabled = true;
+            const originalHtml = btn.innerHTML;
+            btn.innerText = 'હાઈ-ક્વોલિટી ઇમેજ બની રહી છે...';
+
+            scaler.style.transform = 'none';
+
+            try {
+                const canvas = await html2canvas(target, {
+                    width: 1080,
+                    height: 1080,
+                    scale: 2,
+                    backgroundColor: '#0A111E',
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false
+                });
+
+                scaler.style.transform = 'scale(0.5)';
+
+                // Canvas ને Blob માં કન્વર્ટ કરો
+                canvas.toBlob(async function(blob) {
+                    if (!blob) {
+                        alert('ઇમેજ બનાવવામાં તકલીફ પડી!');
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                        return;
+                    }
+
+                    const fileName = `BioGanit_Poll_${Date.now()}.png`;
+                    const file = new File([blob], fileName, { type: 'image/png' });
+
+                    // 1. iOS PWA / Safari Share Sheet (સીધું "Save Image" નો વિકલ્પ આપશે)
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        try {
+                            await navigator.share({
+                                files: [file],
+                                title: 'BioGanit Poll Post',
+                                text: 'Save your HD post image'
+                            });
+                            btn.disabled = false;
+                            btn.innerHTML = originalHtml;
+                            return;
+                        } catch (shareErr) {
+                            if (shareErr.name === 'AbortError') {
+                                btn.disabled = false;
+                                btn.innerHTML = originalHtml;
+                                return;
+                            }
+                        }
+                    }
+
+                    // 2. Fallback for Desktop / Standard Browser Direct Download
+                    const blobUrl = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }, 'image/png');
+
+            } catch (err) {
+                scaler.style.transform = 'scale(0.5)';
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+                alert('ભૂલ આવી! ફરી પ્રયાસ કરો: ' + err.message);
+            }
+        });
+
+        updateCard();
+    </script>
+</body>
+</html>

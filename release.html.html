@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Video Release Post Maker - BioGanit (Bordered Edition)</title>
+    <!-- Google Fonts with crisp weights -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --coral-red: #EF4444;
+            --card-white: #FFFFFF;
+            --dark-card: #0F172A;
+            --cyan-accent: #38BDF8;
+            --text-dark: #1E293B;
+            --badge-red: #EF4444;
+            --inner-border-red: #FCA5A5; /* Light soft red accent border */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif;
+            padding: 20px;
+            background-color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-wrapper {
+            display: flex;
+            gap: 28px;
+            max-width: 1650px;
+            width: 100%;
+            align-items: flex-start;
+        }
+
+        /* --- Left Form Panel --- */
+        .form-panel {
+            width: 440px;
+            background: #ffffff;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            flex-shrink: 0;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        .form-panel h3 {
+            margin: 0 0 14px 0;
+            color: #0f172a;
+            font-size: 17px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #334155;
+            font-size: 13px;
+        }
+
+        .size-box-wrap {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .font-size-input {
+            width: 52px !important;
+            padding: 3px 5px !important;
+            height: 24px;
+            font-size: 12px !important;
+            text-align: center;
+            border-radius: 4px !important;
+            border: 1px solid #cbd5e1 !important;
+            font-weight: 700;
+            color: #EF4444;
+            background: #f8fafc;
+        }
+
+        input[type="text"], textarea, input[type="file"], input[type="range"] {
+            width: 100%;
+            padding: 8px 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 60px;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .img-control-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-clear {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        #downloadBtn {
+            width: 100%;
+            background-color: var(--coral-red);
+            color: white;
+            border: none;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        #downloadBtn:hover {
+            background-color: #dc2626;
+        }
+
+        /* --- Right Live Preview Panel --- */
+        .preview-panel {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .preview-scaler-container {
+            width: 540px;
+            height: 540px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            background: var(--coral-red);
+        }
+
+        .preview-scaler {
+            transform: scale(0.5);
+            transform-origin: top left;
+            width: 1080px;
+            height: 1080px;
+        }
+
+        /* --- 1080x1080 Canvas Frame --- */
+        #video-post {
+            width: 1080px;
+            height: 1080px;
+            background-color: var(--coral-red);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 28px;
+            box-sizing: border-box;
+        }
+
+        /* Top Red Header */
+        .card-header {
+            height: 60px;
+            background-color: var(--coral-red);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            color: #ffffff;
+            flex-shrink: 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 900;
+            font-size: 29px; /* Default */
+            letter-spacing: 0.6px;
+        }
+
+        .header-left svg {
+            width: 32px;
+            height: 32px;
+            fill: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .header-right {
+            font-weight: 900;
+            font-size: 27px; /* Default */
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+
+        /* Center Outer White Card */
+        .card-body-outer {
+            flex: 1;
+            background-color: var(--card-white);
+            border-radius: 22px;
+            padding: 10px; /* Space of white before the red line border */
+            margin: 12px 0;
+            display: flex;
+        }
+
+        /* Inner White Card with Light Red Border */
+        .card-body-inner {
+            flex: 1;
+            background-color: var(--card-white);
+            border: 2px solid var(--inner-border-red); /* The requested light red border line */
+            border-radius: 16px;
+            padding: 24px 34px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Big Centered Watermark Logo */
+        #watermark-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 680px;
+            height: 680px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Content Layer */
+        .content-layer {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Center Dark Announcement Box */
+        .video-box {
+            background-color: var(--dark-card);
+            border-radius: 18px;
+            padding: 22px 28px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-subtitle {
+            color: var(--cyan-accent);
+            font-weight: 800;
+            font-size: 22px; /* Default */
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .video-title {
+            color: #ffffff;
+            font-size: 32px; /* Default */
+            font-weight: 800;
+            line-height: 1.35;
+            margin-bottom: 12px;
+            max-width: 850px;
+        }
+
+        .badge-out-now {
+            background-color: var(--badge-red);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 16px; /* Default */
+            padding: 6px 20px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        /* Center 16:9 YouTube Thumbnail Preview Box */
+        #thumb-wrap {
+            display: none;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            margin: 6px 0;
+        }
+
+        .thumbnail-card {
+            width: 580px;
+            aspect-ratio: 16 / 9;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 3px solid #0F172A;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #thumbImg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Highlights List */
+        .points-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-left: 6px;
+        }
+
+        .point-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 25px; /* Default */
+            font-weight: 700;
+            color: var(--text-dark);
+            font-family: 'Noto Sans Gujarati', sans-serif;
+            line-height: 1.35;
+        }
+
+        .point-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .point-icon svg {
+            width: 26px;
+            height: 26px;
+            fill: #10B981;
+        }
+
+        /* Bottom Footer Bar */
+        .card-footer {
+            height: 50px;
+            background-color: var(--coral-red);
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            color: #ffffff;
+            font-size: 24px; /* Default */
+            font-weight: 800;
+            font-family: 'Noto Sans Gujarati', sans-serif;
+            flex-shrink: 0;
+            gap: 12px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-footer svg {
+            width: 26px;
+            height: 26px;
+            fill: #ffffff;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        
+        <!-- Controls Panel -->
+        <div class="form-panel">
+            <h3>New Video Post Settings</h3>
+
+            <div class="form-group">
+                <label>ચેનલ વોટરમાર્ક લોગો (PNG)</label>
+                <input type="file" id="logoIn" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label>વોટરમાર્ક પારદર્શકતા (Opacity)</label>
+                <div class="slider-row">
+                    <input type="range" id="opacitySlider" min="0.04" max="0.30" step="0.01" value="0.12">
+                    <span id="opacityVal" style="font-size:12px; font-weight:700; width:36px;">12%</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>વીડિયોનું થંબનેલ અપલોડ કરો (YouTube Thumbnail)</label>
+                <div class="img-control-row">
+                    <input type="file" id="thumbIn" accept="image/*">
+                    <button class="btn-clear" id="clearThumbBtn" type="button">હટાવો</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>થંબનેલ સાઇઝ (Thumbnail Size)</label>
+                <div class="slider-row">
+                    <input type="range" id="thumbSizeSlider" min="400" max="750" step="10" value="580">
+                    <span id="thumbSizeVal" style="font-size:12px; font-weight:700; width:45px;">580px</span>
+                </div>
+            </div>
+
+            <!-- 1. Top Header & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>ટોપ હેડર ટેક્સ્ટ</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szTopHeader" value="29" min="16" max="45">px</div>
+                </div>
+                <input type="text" id="topHeaderIn" value="NEW VIDEO RELEASE">
+            </div>
+
+            <!-- 2. Channel Name / Header Right & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>ચેનલ નામ / હેડર રાઇટ ટેક્સ્ટ</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szPart" value="27" min="16" max="42">px</div>
+                </div>
+                <input type="text" id="partIn" value="BIOGANIT">
+            </div>
+
+            <!-- 3. Subtitle (Std & Ch) & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>ધોરણ & પ્રકરણ (દા.ત. STD 12 BIOLOGY | CH 6)</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szStdCh" value="22" min="14" max="38">px</div>
+                </div>
+                <input type="text" id="stdChIn" value="NEET | STD 12 BIOLOGY | CH 6 | PART – 1">
+            </div>
+
+            <!-- 4. Video Main Title & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>વીડિયોનું મુખ્ય ટાઇટલ</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szVideoTitle" value="32" min="18" max="48">px</div>
+                </div>
+                <textarea id="videoTitleIn">Structure of Polynucleotide Chain</textarea>
+            </div>
+
+            <!-- 5. Badge Text & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>બેજ ટેક્સ્ટ</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szBadge" value="16" min="12" max="28">px</div>
+                </div>
+                <input type="text" id="badgeIn" value="WATCH NOW">
+            </div>
+
+            <!-- 6. Points & Common Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>હાઈલાઇટ પોઈન્ટ્સ (લખાણ)</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szPoints" value="25" min="16" max="40">px</div>
+                </div>
+                <input type="text" id="point1In" value="બંધારણીય ઘટકોના Detailed Structures" style="margin-bottom:6px;">
+                <input type="text" id="point2In" value="RNA અને DNA માં આવેલ વિવિધ ન્યુક્લિઓસાઇડ અને ન્યુક્લિઓટાઈડ" style="margin-bottom:6px;">
+                <input type="text" id="point3In" value="પોલી-ન્યુક્લિઓટાઇડ શૃંખલાનું સંપૂર્ણ બંધારણ">
+            </div>
+
+            <!-- 7. Footer Text & Font Size -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label>ફૂટર નોટિસ / ટેક્સ્ટ</label>
+                    <div class="size-box-wrap">Size: <input type="number" class="font-size-input" id="szFooterText" value="24" min="14" max="36">px</div>
+                </div>
+                <input type="text" id="footerTextIn" value="સંપૂર્ણ Video જોવા માટે ઉપરની Link પર Click કરો.">
+            </div>
+
+            <button id="downloadBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                ડાઉનલોડ કરો (Ultra HD Crisp)
+            </button>
+        </div>
+
+        <!-- Live Preview Panel -->
+        <div class="preview-panel">
+            <h3 style="margin-top:0; color:#475569;">લાઇવ પ્રિવ્યુ (1080x1080)</h3>
+            
+            <div class="preview-scaler-container">
+                <div class="preview-scaler">
+                    <div id="video-post">
+                        
+                        <!-- Top Coral Header -->
+                        <div class="card-header">
+                            <div class="header-left" id="hdrLeftWrap">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                                <span id="outTopHeader">NEW VIDEO RELEASE</span>
+                            </div>
+                            <div class="header-right" id="outPart">BIOGANIT</div>
+                        </div>
+
+                        <!-- Outer White Margin -->
+                        <div class="card-body-outer">
+                            <!-- Inner White Card with Light Red Border -->
+                            <div class="card-body-inner">
+                                <div id="watermark-logo"></div>
+
+                                <div class="content-layer">
+                                    
+                                    <!-- Center Dark Box -->
+                                    <div class="video-box">
+                                        <div class="video-subtitle" id="outStdCh">NEET | STD 12 BIOLOGY | CH 6 | PART – 1</div>
+                                        <div class="video-title" id="outVideoTitle">Structure of Polynucleotide Chain</div>
+                                        <div class="badge-out-now" id="outBadge">WATCH NOW</div>
+                                    </div>
+
+                                    <!-- 16:9 YouTube Thumbnail Frame in the Center -->
+                                    <div id="thumb-wrap">
+                                        <div class="thumbnail-card" id="thumbCard">
+                                            <img id="thumbImg" src="" alt="Video Thumbnail">
+                                        </div>
+                                    </div>
+
+                                    <!-- Points List -->
+                                    <div class="points-list" id="pointsContainer">
+                                        <div class="point-item" id="p1Wrap">
+                                            <div class="point-icon">
+                                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                                            </div>
+                                            <span id="outPoint1">બંધારણીય ઘટકોના Detailed Structures</span>
+                                        </div>
+                                        <div class="point-item" id="p2Wrap">
+                                            <div class="point-icon">
+                                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                                            </div>
+                                            <span id="outPoint2">RNA અને DNA માં આવેલ વિવિધ ન્યુક્લિઓસાઇડ અને ન્યુક્લિઓટાઈડ</span>
+                                        </div>
+                                        <div class="point-item" id="p3Wrap">
+                                            <div class="point-icon">
+                                                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                                            </div>
+                                            <span id="outPoint3">પોલી-ન્યુક્લિઓટાઇડ શૃંખલાનું સંપૂર્ણ બંધારણ</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Coral Footer -->
+                        <div class="card-footer">
+                            <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                            <span id="outFooterText">સંપૂર્ણ Video જોવા માટે ઉપરની Link પર Click કરો.</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Html2Canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        const inputs = {
+            logo: document.getElementById('logoIn'),
+            opacity: document.getElementById('opacitySlider'),
+            opacityVal: document.getElementById('opacityVal'),
+            thumb: document.getElementById('thumbIn'),
+            clearThumb: document.getElementById('clearThumbBtn'),
+            thumbSize: document.getElementById('thumbSizeSlider'),
+            thumbSizeVal: document.getElementById('thumbSizeVal'),
+            topHeader: document.getElementById('topHeaderIn'),
+            part: document.getElementById('partIn'),
+            stdCh: document.getElementById('stdChIn'),
+            videoTitle: document.getElementById('videoTitleIn'),
+            badge: document.getElementById('badgeIn'),
+            point1: document.getElementById('point1In'),
+            point2: document.getElementById('point2In'),
+            point3: document.getElementById('point3In'),
+            footerText: document.getElementById('footerTextIn'),
+            // Font size controls
+            szTopHeader: document.getElementById('szTopHeader'),
+            szPart: document.getElementById('szPart'),
+            szStdCh: document.getElementById('szStdCh'),
+            szVideoTitle: document.getElementById('szVideoTitle'),
+            szBadge: document.getElementById('szBadge'),
+            szPoints: document.getElementById('szPoints'),
+            szFooterText: document.getElementById('szFooterText')
+        };
+
+        const outputs = {
+            watermark: document.getElementById('watermark-logo'),
+            thumbWrap: document.getElementById('thumb-wrap'),
+            thumbCard: document.getElementById('thumbCard'),
+            thumbImg: document.getElementById('thumbImg'),
+            topHeader: document.getElementById('outTopHeader'),
+            hdrLeftWrap: document.getElementById('hdrLeftWrap'),
+            part: document.getElementById('outPart'),
+            stdCh: document.getElementById('outStdCh'),
+            videoTitle: document.getElementById('outVideoTitle'),
+            badge: document.getElementById('outBadge'),
+            point1: document.getElementById('outPoint1'),
+            point2: document.getElementById('outPoint2'),
+            point3: document.getElementById('outPoint3'),
+            p1Wrap: document.getElementById('p1Wrap'),
+            p2Wrap: document.getElementById('p2Wrap'),
+            p3Wrap: document.getElementById('p3Wrap'),
+            footerText: document.getElementById('outFooterText')
+        };
+
+        function updateCard() {
+            // Text sync
+            outputs.topHeader.innerText = inputs.topHeader.value;
+            outputs.part.innerText = inputs.part.value;
+            outputs.stdCh.innerText = inputs.stdCh.value;
+            outputs.videoTitle.innerText = inputs.videoTitle.value;
+            outputs.badge.innerText = inputs.badge.value;
+            outputs.footerText.innerText = inputs.footerText.value;
+
+            if (inputs.point1.value.trim()) {
+                outputs.point1.innerText = inputs.point1.value;
+                outputs.p1Wrap.style.display = 'flex';
+            } else {
+                outputs.p1Wrap.style.display = 'none';
+            }
+
+            if (inputs.point2.value.trim()) {
+                outputs.point2.innerText = inputs.point2.value;
+                outputs.p2Wrap.style.display = 'flex';
+            } else {
+                outputs.p2Wrap.style.display = 'none';
+            }
+
+            if (inputs.point3.value.trim()) {
+                outputs.point3.innerText = inputs.point3.value;
+                outputs.p3Wrap.style.display = 'flex';
+            } else {
+                outputs.p3Wrap.style.display = 'none';
+            }
+
+            // Live Font Size adjustments
+            const szTop = inputs.szTopHeader.value || 29;
+            outputs.hdrLeftWrap.style.fontSize = szTop + 'px';
+
+            const szPart = inputs.szPart.value || 27;
+            outputs.part.style.fontSize = szPart + 'px';
+
+            const szSub = inputs.szStdCh.value || 22;
+            outputs.stdCh.style.fontSize = szSub + 'px';
+
+            const szTitle = inputs.szVideoTitle.value || 32;
+            outputs.videoTitle.style.fontSize = szTitle + 'px';
+
+            const szBadge = inputs.szBadge.value || 16;
+            outputs.badge.style.fontSize = szBadge + 'px';
+
+            const szPts = inputs.szPoints.value || 25;
+            [outputs.p1Wrap, outputs.p2Wrap, outputs.p3Wrap].forEach(p => p.style.fontSize = szPts + 'px');
+
+            const szFoot = inputs.szFooterText.value || 24;
+            outputs.footerText.parentElement.style.fontSize = szFoot + 'px';
+        }
+
+        // Opacity Slider
+        inputs.opacity.addEventListener('input', function(e) {
+            const val = parseFloat(e.target.value);
+            outputs.watermark.style.opacity = val;
+            inputs.opacityVal.innerText = Math.round(val * 100) + '%';
+        });
+
+        // Thumbnail Size Slider
+        inputs.thumbSize.addEventListener('input', function(e) {
+            const width = e.target.value;
+            outputs.thumbCard.style.width = width + 'px';
+            inputs.thumbSizeVal.innerText = width + 'px';
+        });
+
+        // Logo Upload
+        inputs.logo.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    outputs.watermark.style.backgroundImage = `url(${evt.target.result})`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Video Thumbnail Upload
+        inputs.thumb.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    outputs.thumbImg.src = evt.target.result;
+                    outputs.thumbWrap.style.display = 'flex';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Clear Thumbnail
+        inputs.clearThumb.addEventListener('click', function() {
+            inputs.thumb.value = '';
+            outputs.thumbImg.src = '';
+            outputs.thumbWrap.style.display = 'none';
+        });
+
+        // Attach input listeners for real-time text and font-size updates
+        Object.values(inputs).forEach(input => {
+            if (input.type !== 'file' && input.type !== 'range') {
+                input.addEventListener('input', updateCard);
+            }
+        });
+
+        // iOS Safari & Add to Home Screen (PWA) Friendly Ultra HD Export
+        document.getElementById('downloadBtn').addEventListener('click', async function() {
+            const btn = this;
+            const target = document.getElementById('video-post');
+            const scaler = document.querySelector('.preview-scaler');
+
+            btn.disabled = true;
+            const originalHtml = btn.innerHTML;
+            btn.innerText = 'હાઈ-ક્વોલિટી ઇમેજ બની રહી છે...';
+
+            scaler.style.transform = 'none';
+
+            try {
+                const canvas = await html2canvas(target, {
+                    width: 1080,
+                    height: 1080,
+                    scale: 2,
+                    backgroundColor: '#EF4444',
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false
+                });
+
+                scaler.style.transform = 'scale(0.5)';
+
+                canvas.toBlob(async function(blob) {
+                    if (!blob) {
+                        alert('ઇમેજ બનાવવામાં તકલીફ પડી!');
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                        return;
+                    }
+
+                    const fileName = `BioGanit_New_Video_HD_${Date.now()}.png`;
+                    const file = new File([blob], fileName, { type: 'image/png' });
+
+                    // iOS Safari / Home Screen Web-Clip Share Sheet (Save to Photos)
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        try {
+                            await navigator.share({
+                                files: [file],
+                                title: 'BioGanit Video Post',
+                                text: 'Save your Ultra HD post'
+                            });
+                            btn.disabled = false;
+                            btn.innerHTML = originalHtml;
+                            return;
+                        } catch (shareErr) {
+                            if (shareErr.name === 'AbortError') {
+                                btn.disabled = false;
+                                btn.innerHTML = originalHtml;
+                                return;
+                            }
+                        }
+                    }
+
+                    // Desktop / Regular Browser Direct Download Fallback
+                    const blobUrl = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }, 'image/png');
+
+            } catch (err) {
+                scaler.style.transform = 'scale(0.5)';
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+                alert('ભૂલ આવી! ફરી પ્રયાસ કરો: ' + err.message);
+            }
+        });
+
+        updateCard();
+    </script>
+</body>
+</html>
